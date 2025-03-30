@@ -1,0 +1,9 @@
+save_img/
+saved_models/
+result/
+*.npy
+*.pth
+*.pdf
+*.pyc
+cache*
+dna_cache*

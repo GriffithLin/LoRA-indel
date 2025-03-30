@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="6061a55e-48a6-4e5a-864c-61b8f110b934" name="dna_Lin">
+        <fileTransfer rootFolder="/data3/linming" accessType="SFTP" host="210.45.212.61" port="9000" sshConfigId="7527f308-4a04-43d5-a617-131d9f561d47" sshConfig="linming@210.45.212.61:9000 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
