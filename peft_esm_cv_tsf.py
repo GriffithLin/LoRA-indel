@@ -20,9 +20,9 @@ from torch.utils.data import Subset
 os.environ["MASTER_PORT"] = "29503" 
 
 
-train_data_path = "/data1/linming/DPPred-indel/dataCenter/train.fasta"
-test_data_path = "/data1/linming/DPPred-indel/dataCenter/test.fasta"
-tran_vcf_path = "/data1/linming/DPPred-indel/dataCenter/train.vcf"
+train_data_path = "dataCenter/train.fasta"
+test_data_path = "dataCenter/test.fasta"
+train_vcf_path = "dataCenter/train.vcf"
 # os.environ['CUDA_VISIBLE_DEVICES'] = "1"
 num_gpu = 2
 
@@ -335,7 +335,7 @@ def finetune_single(train_dataset, val_set, test_dataset, batch_converter, args)
         print(f"Metrics saved to {metrics_filename}")
 
 
-alpha_list = [2, 4, 64]
+# alpha_list = [2, 4, 64]
 # ["query",  "key", "value"]
 # lora_modules_list = [["key", "value"], ["query"], ["key"]]
 # lora_name_list = ["KV", "Q", "K"]
@@ -347,7 +347,7 @@ def train(args):
     batch_converter = BatchConverter_tsf(tokenizer)
     dataset = FastaBatchedDataset.from_file(train_data_path)
     test_dataset = FastaBatchedDataset.from_file(test_data_path)
-    tran_vcf = pd.read_csv(tran_vcf_path, sep = "\t")
+    tran_vcf = pd.read_csv(train_vcf_path, sep = "\t")
     train_label = tran_vcf["INFO"].apply(lambda x:float(x[-1]))
     cv = StratifiedKFold(n_splits=10, shuffle=True, random_state=42)
     train_datasets, val_datasets = [], []       
@@ -365,9 +365,9 @@ def train(args):
     # 实际只做一次
     for i, (train_dataset, val_dataset) in enumerate(zip(train_datasets, val_datasets)):
         # for args.lora_modules, lora_name in zip(lora_modules_list, lora_name_list):
-        for args.lora_alpha in alpha_list:
-            args.model_name = model_name  + "lora_alpha" + str(args.lora_alpha)+ "_lora_rank" + str(args.lora_rank)   + "val" + str(args.val_idx)  
-            finetune_single(train_dataset, val_dataset, test_dataset, batch_converter, args)
+        # for args.lora_alpha in alpha_list:
+        args.model_name = model_name  + "lora_alpha" + str(args.lora_alpha)+ "_lora_rank" + str(args.lora_rank)   + "val" + str(args.val_idx)  
+        finetune_single(train_dataset, val_dataset, test_dataset, batch_converter, args)
         break
     
 
@@ -381,7 +381,7 @@ if __name__ == '__main__':
     # args.lora_alpha = 64
     # args.lr = 0.0005
     args.FT_method = "LoRA"
-    args.param_num = "3B"
+    args.param_num = "8M"
     if args.FT_method == "FT":
         args.learning_rate = 0.0005
     
